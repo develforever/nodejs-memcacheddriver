@@ -1,1 +1,2 @@
-memcachedriver
+# nodejs-memcacheddriver
+Driver for memcached
