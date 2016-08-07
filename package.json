@@ -1,0 +1,17 @@
+{
+    "name": "memcachedriver",
+    "version": "1.0.0",
+    "keywords": ["memcached"],
+    "author": "Jumper <rockfade@gmail.com>",
+    "contributors": [
+        
+    ],
+    "main" : "main.js",
+    "scripts": { 
+        "start" : "node main.js"
+        },
+    "dependencies": {
+        "bluebird": "",
+        "express": ""
+    }
+}
