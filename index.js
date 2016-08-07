@@ -4,24 +4,21 @@
  * and open the template in the editor.
  */
 
-var ClientManager = require('./ClientManager');
-var obj = require('./obj');
+var ClientManager = require('./src/ClientManager');
 
-var port = null;
-var host = null;
-
-
+var port = 11211;
+var host = '192.168.33.10';
 
 var express = require('express');
 var app = express();
 
-var manager = new ClientManager({}, '192.168.33.10', 11211);
+var manager = new ClientManager({}, host, port);
 
 app.get('/', function (req, res) {
 
     console.time('r');
     manager
-            .set('key', 'aaa', 60)
+            .set('key', 'test value', 60)
             .then(function (value) {
 
                 console.log('value saved');
@@ -59,7 +56,7 @@ process.on('exit', function () {
 });
 
 app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+    console.log('Express test app listening on port 3000');
 });
 
 

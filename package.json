@@ -1,17 +1,21 @@
 {
-    "name": "memcachedriver",
+    "name": "nodejs-memcacheddriver",
     "version": "1.0.0",
     "keywords": ["memcached"],
-    "author": "Jumper <rockfade@gmail.com>",
+    "author": "Develforever <rockfade@gmail.com>",
     "contributors": [
-        
+        {
+            "name": "Develforever",
+            "email": "rockfade@gmail.com",
+            "url": "https://plus.google.com/u/0/+RobertJamr%C3%B3z/posts"
+        }
     ],
-    "main" : "main.js",
-    "scripts": { 
-        "start" : "node main.js"
-        },
+    "main": "src/ClientManager.js",
+    "scripts": {
+        "start": "node index.js"
+    },
     "dependencies": {
-        "bluebird": "",
-        "express": ""
+        "bluebird": "3.4.1",
+        "express": "4.14.0"
     }
 }

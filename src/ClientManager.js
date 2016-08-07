@@ -6,7 +6,7 @@
 
 var util = require('util');
 var Promise = require('bluebird');
-var Client = require('./client');
+var Client = require('./Client');
 
 function ClientManager(params, host, port) {
 
