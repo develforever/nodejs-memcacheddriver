@@ -14,7 +14,7 @@
     "scripts": {
         "start": "node index.js"
     },
-    "dependencies": {
+    "devDdependencies": {
         "bluebird": "3.4.1",
         "express": "4.14.0"
     }
