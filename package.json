@@ -1,6 +1,6 @@
 {
     "name": "nodejs-memcacheddriver",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": ["memcached"],
     "author": "Develforever <rockfade@gmail.com>",
     "contributors": [
