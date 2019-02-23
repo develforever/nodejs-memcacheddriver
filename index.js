@@ -7,47 +7,50 @@
 var ClientManager = require('./src/ClientManager');
 
 var port = 11211;
-var host = '192.168.33.10';
+var host = '192.168.8.106';
 
 var express = require('express');
 var app = express();
 
 var manager = new ClientManager({}, host, port);
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
 
-    console.time('r');
-    manager
-            .set('key', 'test value', 60)
-            .then(function (value) {
+    let tasks = []
+    for (let fname in req.query) {
+        tasks.push(manager
+            .set(fname, req.query[fname].value, parseInt(req.query[fname].expire)));
+    };
+    let out = [];
+    Promise.all(tasks)
+        .then(function (stored) {
 
-                console.log('value saved');
-                manager
-                        .get('key')
-                        .then(function (value) {
+            tasks = [];
 
-                            console.log('value is', value);
-                            console.timeEnd('r');
-                            res.send(value);
-                        })
-                        .catch(function (e) {
+            out.push(stored);
 
-                            res.send(e);
-                        });
-
-            })
-            .catch(function (e) {
-
-                res.send(e);
+            stored.forEach(function (e) {
+                tasks.push(manager
+                    .get(e[1]));
             });
 
+            return Promise.all(tasks);
+        })
+        .then(function (getter) {
 
+            out.push(getter)
+
+        })
+        .finally(function () {
+            res.send(out);
+        });
 
 });
 
-process.on('SIGINT', function () {
+process.on('SIGINT', function (name, value) {
 
     console.log('args sigint', arguments);
+    process.exit();
 });
 
 process.on('exit', function () {

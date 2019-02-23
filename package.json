@@ -1,7 +1,11 @@
 {
     "name": "nodejs-memcacheddriver",
-    "version": "1.0.1",
-    "keywords": ["memcached"],
+    "version": "1.0.2",
+    "keywords": [
+        "memcached",
+        "cache",
+        "server"
+    ],
     "author": "Develforever <rockfade@gmail.com>",
     "contributors": [
         {
@@ -12,10 +16,11 @@
     ],
     "main": "src/ClientManager.js",
     "scripts": {
-        "start": "node index.js"
+        "start": "node index.js",
+        "debug": "node --nolazy --inspect-brk=9229 index.js"
     },
-    "devDdependencies": {
-        "bluebird": "3.4.1",
-        "express": "4.14.0"
+    "devDependencies": {
+        "bluebird": "3.5.3",
+        "express": "4.16.4"
     }
 }

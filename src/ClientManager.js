@@ -13,7 +13,7 @@ function ClientManager(params, host, port) {
     var def = {
         pool: 5
     },
-    sockets = [];
+        sockets = [];
     var config = util._extend(def, params);
 
 
@@ -45,26 +45,21 @@ function ClientManager(params, host, port) {
     }
 
     this.get = function (key) {
-        var p = getClient(ci);
+        return getClient(ci)
+            .then(function (conf) {
 
-        return p
-                .then(function (conf) {
-
-                    var client = conf.client;
-                    return client.get(key);
-                });
+                var client = conf.client;
+                return client.get(key);
+            });
     };
 
     this.set = function (key, value, expire) {
-        var p = getClient(ci);
+        return getClient(ci)
+            .then(function (conf) {
 
-
-        return p
-                .then(function (conf) {
-
-                    var client = conf.client;
-                    return client.set(key, value, expire);
-                });
+                var client = conf.client;
+                return client.set(key, value, expire);
+            });
     };
 
 }
