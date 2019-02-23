@@ -29,35 +29,39 @@ function Client(port, host) {
             var client = new net.Socket();
             client.setTimeout(1000);
             client.setEncoding('utf8');
-
+            var stored = false;
             var lastValue = '';
+            let out = null;
 
             client.on('data', function (data) {
 
                 var str = data.toString('str');
                 var spl = str.split('\r\n', 2);
-                var out = null;
 
                 console.log('data is: ', str, spl);
 
-                if (spl[0].indexOf('STORED') === -1) {
+                if (spl[0].indexOf('VALUE') !== -1) {
 
-                    lastValue += spl[0].indexOf('VALUE') !== -1 ? spl[1] : spl[0];
+                    lastValue += spl[1];
 
                     if (spl.length === 2 && spl[0].indexOf('END') !== -1) {
                         lastValue = null;
                     }
 
                     if (str.indexOf('END') !== -1) {
-
-                        em.emit('data', lastValue !== null ? lastValue.replace(/\\r\\n/ig, '\r\n') : lastValue);
-
+                        out = lastValue;
                         lastValue = '';
                     }
+                }else if(spl[0].indexOf('STORED') !== -1){
+
+                    stored = true;
+                    out = stored;
                 } else {
 
-                    em.emit('data', out);
+                    
                 }
+
+                em.emit('data', out);
 
             });
             client.on('end', function () {
@@ -86,7 +90,7 @@ function Client(port, host) {
 
     function exit(code) {
 
-        console.log('client exit args', code);
+        console.log(self.name  + ' exit args', code);
 
         global.clients.forEach(function (client) {
 
@@ -101,7 +105,7 @@ function Client(port, host) {
     process.on('exit', exit);
     process.on('unhandledRejection', function (reason, p) {
         console.log('unhandled rejection');
-        exit();
+        exit(1);
     });
 
     this.set = function (name, value, exp) {
@@ -116,16 +120,14 @@ function Client(port, host) {
             getConnection()
                     .then(function (client) {
 
-                        em.once('data', function (v) {
-
-                            console.log('set data event resolve');
-                            resolve(v);
+                        em.once('data', function (stored) {
+                            resolve([stored, name, value, exp]);
                         });
 
                         client.write('set ' + name + ' 0 ' + exp + ' ' + Buffer.byteLength(str, 'utf8') + '\r\n' + str + '\r\n')
                     });
 
-        }).bind({a: 1});
+        });
     };
 
     this.get = function (key) {
@@ -133,10 +135,11 @@ function Client(port, host) {
 
             getConnection()
                     .then(function (client) {
+                        
                         em.once('data', function (v) {
 
                             console.log(self.name + ' get data event resolve');
-                            resolve(v);
+                            resolve([key, v]);
                         });
                         client.write('get ' + key + ' \r\n');
                     });
